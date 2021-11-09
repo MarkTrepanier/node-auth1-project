@@ -7,7 +7,12 @@ const User = require("../users/users-model.js");
     "message": "You shall not pass!"
   }
 */
-function restricted() {}
+async function restricted(req, res, next) {
+  if (!req.session.user) {
+    next({ status: 401, message: "You shall not pass!" });
+  }
+  next();
+}
 
 /*
   If the username in req.body already exists in the database
@@ -41,7 +46,6 @@ async function checkUsernameExists(req, res, next) {
   if (!user) {
     next({ status: 401, message: "Invalid credentials" });
   } else {
-    console.log(user);
     req.user = user;
     next();
   }
@@ -69,4 +73,5 @@ module.exports = {
   checkUsernameExists,
   checkUsernameFree,
   checkPasswordLength,
+  restricted,
 };

@@ -25,7 +25,7 @@ server.use(express.json());
 server.use(cors());
 server.use(
   session({
-    name: "jerry",
+    name: "chocolatechip",
     secret: process.env.SESSION_SECRET || "theSecret",
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 1,

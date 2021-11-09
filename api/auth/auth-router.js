@@ -5,6 +5,7 @@ const {
   checkUsernameExists,
   checkUsernameFree,
   checkPasswordLength,
+  restricted,
 } = require("./auth-middleware");
 
 const router = require("express").Router();
@@ -36,27 +37,23 @@ router.post("/login", checkUsernameExists, async (req, res, next) => {
       return next({ status: 401, message: "invalid credentials" });
     }
     req.session.user = req.user;
-    res.json({ message: "yeah" });
+    res.json({ message: `welcome ${req.user.username}` });
   } catch (err) {
     next(err);
   }
 });
-/**
-  2 [POST] /api/auth/login { "username": "sue", "password": "1234" }
 
-  response:
-  status 200
-  {
-    "message": "Welcome sue!"
+router.get("/logout", (req, res, next) => {
+  if (!req.session.user) {
+    return res.status(200).json({ message: "no session" });
   }
-
-  response on invalid credentials:
-  status 401
-  {
-    "message": "Invalid credentials"
-  }
- */
-
+  req.session.destroy((err) => {
+    if (err) {
+      next();
+    }
+    res.status(200).json({ message: "logged out" });
+  });
+});
 /**
   3 [GET] /api/auth/logout
 
