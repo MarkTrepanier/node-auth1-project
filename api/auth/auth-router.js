@@ -5,7 +5,6 @@ const {
   checkUsernameExists,
   checkUsernameFree,
   checkPasswordLength,
-  restricted,
 } = require("./auth-middleware");
 
 const router = require("express").Router();
@@ -18,7 +17,7 @@ router.post(
   async (req, res, next) => {
     try {
       const { username, password } = req.body;
-      const hashed = bcrypt.hashSync(password, 13);
+      const hashed = bcrypt.hashSync(password, 6);
       const newUser = { username, password: hashed };
       const posted = await User.add(newUser);
       res.status(201).json(posted);
