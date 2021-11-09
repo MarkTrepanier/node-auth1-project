@@ -3,8 +3,7 @@ const helmet = require("helmet");
 const cors = require("cors");
 const userRouter = require("./users/users-router");
 const session = require("express-session");
-const { default: knex } = require("knex");
-const Store = require("connect-session-knex")(knex);
+const Store = require("connect-session-knex")(session);
 /**
   Do what needs to be done to support sessions with the `express-session` package!
   To respect users' privacy, do NOT send them a cookie unless they log in.
@@ -34,6 +33,13 @@ server.use(
     },
     resave: false,
     saveUninitialized: false,
+    store: new Store({
+      knex: require("../data/db-config.js"),
+      tablename: "sessions",
+      sidfieldname: "sid",
+      createtable: true,
+      clearInterval: 1000 * 60 * 60,
+    }),
   })
 );
 
