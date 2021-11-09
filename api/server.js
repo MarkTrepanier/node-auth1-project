@@ -23,12 +23,25 @@ const server = express();
 server.use(helmet());
 server.use(express.json());
 server.use(cors());
+server.use(
+  session({
+    name: "jerry",
+    secret: process.env.SESSION_SECRET || "theSecret",
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 1,
+      secure: false,
+      httpOnly: false,
+    },
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+server.use("/api/users", userRouter);
 
 server.get("/", (req, res) => {
   res.json({ api: "up" });
 });
-
-server.use("/api/users", userRouter);
 
 server.use((err, req, res, next) => {
   // eslint-disable-line
