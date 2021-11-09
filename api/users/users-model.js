@@ -9,19 +9,29 @@ function find() {
 /**
   resolves to an ARRAY with all users that match the filter condition
  */
-function findBy(filter) {}
+function findBy(filter) {
+  return db("users").where(filter).orderBy("user_id");
+}
 
 /**
   resolves to the user { user_id, username } with the given user_id
  */
-function findById(user_id) {}
+function findById(user_id) {
+  return db("users").where({ user_id }).first;
+}
 
 /**
   resolves to the newly inserted user { user_id, username }
  */
-function add(user) {}
+function add(user) {
+  const [user_id] = db("users").insert(user);
+  return findById(user_id);
+}
 
 // Don't forget to add these to the `exports` object so they can be required in other modules
 module.exports = {
   find,
+  findBy,
+  findById,
+  add,
 };
