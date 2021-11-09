@@ -45,7 +45,7 @@ server.use(
 );
 
 server.use("/api/users", userRouter);
-server.use("/api/register", authRouter);
+server.use("/api/auth", authRouter);
 
 server.get("/", (req, res) => {
   res.json({ api: "up" });
